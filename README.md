@@ -1,2 +1,76 @@
-# ppt-to-high-res-image-converter
-Convert PowerPoint (.ppt/.pptx) to high-DPI image-based PPT with custom DPI and compression. Powered by DeepSeek v4 Flash.
+# PPT to High-Resolution Image-based PPT Converter
+
+将 PowerPoint 演示文稿（.ppt/.pptx）转换为高分辨率图片型 PPT，支持自定义 DPI（最高可达 1200+）和图片压缩，最终生成的每一页幻灯片均为图片（不可编辑文字），适合存档、打印或防止格式错乱。
+
+## ✨ 功能特点
+
+- **高保真导出**：基于 Microsoft PowerPoint COM 组件直接导出幻灯片，确保矢量、字体、图表等元素完美呈现。
+- **自定义 DPI**：提供常用 DPI 选项（96/150/300/600/1200），并支持手动输入任意 ≥72 的数值，满足屏幕显示、印刷出版等不同需求。
+- **图片压缩**：可选择将导出图片转为 JPEG 格式，并调整压缩质量（1–100），在画质与文件体积之间取得平衡。启用后可将 PPT 文件大小降低 80% 以上。
+- **友好界面**：使用 `tkinter` 构建图形界面，无需命令行操作，实时显示转换进度。
+- **跨页完整保留**：自动跳过隐藏幻灯片，保持原始页面尺寸比例，图片居中于白色背景。
+
+## 🛠 技术实现
+
+- 调用 **PowerPoint COM 对象**（Windows only）导出高分辨率图片。
+- 使用 **python-pptx** 重新组合图片并生成新的 PPTX 文件。
+- 依赖 **Pillow** 处理图片压缩与格式转换。
+- 整体以单文件 Python 脚本形式提供，无需复杂部署。
+
+## 📦 依赖环境
+
+- **操作系统**：Windows（因为依赖 Microsoft PowerPoint COM）
+- **软件**：Microsoft PowerPoint 2010 或更高版本（必须已安装）
+- **Python**：3.7 及以上版本
+- **Python 库**：`pywin32`, `python-pptx`, `Pillow`
+
+安装依赖命令：
+```bash
+pip install pywin32 python-pptx Pillow
+```
+
+## 🚀 使用方法
+
+1. 下载本项目的 `ppt2image_ppt.py` 脚本。
+2. 在命令行中运行：`python ppt2image_ppt.py`
+3. 图形界面打开后：
+   - 点击 **浏览...** 选择原始的 `.ppt` 或 `.pptx` 文件。
+   - 点击 **保存为...** 设置输出路径和文件名（默认为 `原文件名_图片型.pptx`）。
+   - 选择或自定义 **DPI**（建议：屏幕显示 150–300，打印 600–1200）。
+   - 根据需要勾选 **启用压缩** 并调整 JPEG 质量（85% 通常视觉无损）。
+   - 点击 **开始转换**，等待处理完成（时间取决于页数和 DPI）。
+4. 转换结束后会在输出路径生成图片型 PPTX 文件。
+
+## 📝 注意事项
+
+- 转换过程中 **PowerPoint 会短暂弹出窗口**，这是正常现象，请勿手动关闭。结束后窗口会自动关闭。
+- 如果 PPT 中包含复杂动画或 OLE 对象，导出图片时可能略有偏差，但文字、形状、图表均可正确呈现。
+- 隐藏的幻灯片不会被导出。
+- 启用压缩时，原始透明背景会被填充为白色（JPEG 不支持透明通道）。
+- 极高 DPI（如 2400）会导致临时图片体积巨大（单张可能超过 500MB），脚本已自动限制单边最大 16000 像素以避免内存溢出，但仍建议根据实际需要选择 DPI。
+
+## ❓ 常见问题
+
+**Q：为什么必须安装 Microsoft PowerPoint？**  
+A：本脚本利用 PowerPoint 本身的渲染引擎导出高精度图片，这是目前最可靠的获取矢量/字体/图表真实效果的方法。
+
+**Q：可以处理 .ppt 和 .pptx 两种格式吗？**  
+A：可以，脚本会自动识别并兼容。
+
+**Q：输出文件太大了怎么办？**  
+A：请勾选“启用压缩”，并将 JPEG 质量适当降低（例如 75%）。对于 300 DPI、20 页的文档，压缩后通常可控制在 10–30 MB。
+
+**Q：运行时提示 `pywin32` 相关错误？**  
+A：请确保使用管理员权限运行，并确认 PowerPoint 没有被其他进程占用。如果依然报错，重启计算机后重试。
+
+## 🤝 贡献与反馈
+
+本项目由 **DeepSeek v4 Flash** 辅助编程完成。如有问题或建议，欢迎提交 Issue。
+
+## 📄 许可证
+
+MIT License
+
+---
+
+**Happy converting! 🎉**
